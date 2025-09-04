@@ -1,0 +1,30 @@
+/* MaciusWear - Modern Streetwear E-commerce */
+/* Main CSS file that imports all component styles */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap");
+
+/* Core styles */
+@import url("./styles/variables.css");
+@import url("./styles/reset.css");
+@import url("./styles/base.css");
+
+/* Layout components */
+@import url("./styles/header.css");
+@import url("./styles/footer.css");
+
+/* Page styles */
+@import url("./styles/home.css");
+@import url("./styles/about.css");
+@import url("./styles/contact.css");
+@import url("./styles/checkout.css");
+
+/* Component styles */
+@import url("./styles/products.css");
+@import url("./styles/cart.css");
+@import url("./styles/modals.css");
+@import url("./styles/forms.css");
+
+/* Utility styles */
+@import url("./styles/animations.css");
+@import url("./styles/responsive.css");
