@@ -1,4 +1,4 @@
-/* Base styles and utilities */
+/* Base styles and utilities - BLVNT Dark Theme */
 
 html {
   scroll-behavior: smooth;
@@ -11,6 +11,16 @@ body {
   line-height: var(--line-height-normal);
   color: var(--text-primary);
   background: var(--bg-white);
+  background-image: radial-gradient(
+      circle at 20% 80%,
+      rgba(0, 255, 255, 0.03) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(157, 76, 221, 0.03) 0%,
+      transparent 50%
+    );
 }
 
 /* Container */
@@ -474,4 +484,122 @@ li {
 }
 .z-50 {
   z-index: 50;
+}
+
+/* Button Components - BLVNT Street Style */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4) var(--space-8);
+  background: var(--gradient-brand);
+  color: var(--text-light);
+  border: none;
+  border-radius: var(--radius-lg);
+  font-weight: 700;
+  font-size: var(--font-size-sm);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-brand);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4) var(--space-8);
+  background: transparent;
+  color: var(--accent-electric);
+  border: 2px solid var(--accent-electric);
+  border-radius: var(--radius-lg);
+  font-weight: 700;
+  font-size: var(--font-size-sm);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-secondary::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--gradient-brand);
+  transition: var(--transition-smooth);
+  z-index: -1;
+}
+
+.btn-secondary:hover::before {
+  left: 0;
+}
+
+.btn-secondary:hover {
+  color: var(--text-light);
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3) var(--space-6);
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  text-decoration: none;
+}
+
+.btn-ghost:hover {
+  background: var(--bg-glass);
+  border-color: var(--accent-electric);
+  color: var(--accent-electric);
+  transform: translateY(-1px);
+}
+
+.btn-neon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4) var(--space-8);
+  background: var(--primary-black);
+  color: var(--accent-electric);
+  border: 2px solid var(--accent-electric);
+  border-radius: var(--radius-lg);
+  font-weight: 700;
+  font-size: var(--font-size-sm);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  text-decoration: none;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+}
+
+.btn-neon:hover {
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.8);
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+  transform: translateY(-2px);
 }

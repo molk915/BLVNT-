@@ -7,7 +7,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   z-index: var(--z-modal-backdrop);
@@ -27,9 +27,10 @@
 }
 
 .modal-content {
-  background: white;
+  background: var(--primary-black);
+  border: 2px solid var(--accent-electric);
   border-radius: var(--radius-3xl);
-  box-shadow: var(--shadow-2xl);
+  box-shadow: 0 0 40px rgba(0, 255, 255, 0.2);
   max-width: 90vw;
   max-height: 90vh;
   overflow: hidden;
@@ -41,11 +42,12 @@
 .modal-overlay.active .modal-content {
   transform: translateY(0) scale(1);
   animation: modalSlideIn 0.4s ease-out;
+  box-shadow: 0 0 60px rgba(0, 255, 255, 0.4);
 }
 
 .modal-header {
   padding: var(--space-6) var(--space-8);
-  border-bottom: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--accent-electric);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -56,27 +58,31 @@
   font-family: var(--font-display);
   font-size: var(--font-size-2xl);
   font-weight: 700;
-  color: var(--primary-black);
+  color: var(--text-light);
   margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .modal-close {
   width: 40px;
   height: 40px;
-  background: var(--bg-white);
-  border: 2px solid var(--border-light);
+  background: var(--bg-dark);
+  border: 2px solid var(--accent-electric);
   border-radius: var(--radius-full);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: var(--font-size-xl);
-  color: var(--text-secondary);
+  color: var(--accent-electric);
   cursor: pointer;
   transition: var(--transition-fast);
 }
 
 .modal-close:hover {
-  background: var(--accent-red);
+  background: var(--accent-electric);
+  color: var(--primary-black);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
   color: white;
   border-color: var(--accent-red);
   transform: rotate(90deg);

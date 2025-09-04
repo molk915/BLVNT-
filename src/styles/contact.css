@@ -3,7 +3,7 @@
 .contact-hero {
   min-height: 60vh;
   background: var(--primary-black);
-  color: white;
+  color: var(--text-light);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -22,7 +22,7 @@
   background: url("https://images.unsplash.com/photo-1423666639041-f56000c27a9a?w=1600&h=900&fit=crop&overlay=dark")
       center/cover,
     var(--gradient-hero);
-  background-blend-mode: overlay;
+  background-blend-mode: multiply;
   z-index: 1;
 }
 
@@ -34,10 +34,15 @@
   right: 0;
   bottom: 0;
   background: radial-gradient(
-    circle at 50% 50%,
-    rgba(255, 51, 102, 0.2) 0%,
-    transparent 70%
-  );
+      circle at 50% 50%,
+      rgba(0, 255, 255, 0.15) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      circle at 30% 70%,
+      rgba(157, 76, 221, 0.1) 0%,
+      transparent 70%
+    );
   z-index: 2;
 }
 
@@ -50,27 +55,35 @@
 .contact-hero h1 {
   font-family: var(--font-display);
   font-size: clamp(3rem, 6vw, 5rem);
-  font-weight: 800;
+  font-weight: 900;
   margin-bottom: var(--space-6);
-  letter-spacing: -0.02em;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  animation: fadeInUp 1s ease-out;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+  animation: logoGlow 4s ease-in-out infinite;
 }
 
 .contact-subtitle {
   font-size: var(--font-size-xl);
   font-weight: 400;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-secondary);
   max-width: 600px;
   margin: 0 auto;
   line-height: var(--line-height-relaxed);
-  animation: fadeInUp 1s ease-out 0.2s both;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: var(--font-street);
+  animation: undergroundFade 1s ease-out 0.2s both;
 }
 
 /* Contact content */
 .contact-content {
   padding: var(--space-24) 0;
-  background: var(--bg-white);
+  background: var(--primary-black);
 }
 
 .contact-grid {
@@ -84,11 +97,16 @@
 .contact-info h2 {
   font-family: var(--font-display);
   font-size: var(--font-size-3xl);
-  font-weight: 700;
-  color: var(--primary-black);
+  font-weight: 900;
+  color: var(--text-light);
   margin-bottom: var(--space-8);
-  letter-spacing: -0.02em;
+  letter-spacing: 2px;
+  text-transform: uppercase;
   position: relative;
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .contact-info h2::after {
@@ -197,11 +215,11 @@
 
 /* Contact form */
 .contact-form-container {
-  background: white;
+  background: var(--bg-light);
   padding: var(--space-12);
   border-radius: var(--radius-3xl);
   box-shadow: var(--shadow-2xl);
-  border: 1px solid var(--border-light);
+  border: 2px solid var(--accent-electric);
   position: relative;
   overflow: hidden;
 }
@@ -220,11 +238,16 @@
 .contact-form-container h2 {
   font-family: var(--font-display);
   font-size: var(--font-size-3xl);
-  font-weight: 700;
-  color: var(--primary-black);
+  font-weight: 900;
+  color: var(--text-light);
   margin-bottom: var(--space-8);
   text-align: center;
-  letter-spacing: -0.02em;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .contact-form {
@@ -424,7 +447,7 @@
 
 /* FAQ section */
 .contact-faq {
-  background: var(--bg-light);
+  background: var(--primary-black);
   padding: var(--space-20) 0;
   margin-top: var(--space-20);
   border-radius: var(--radius-3xl);
@@ -433,11 +456,16 @@
 .contact-faq h2 {
   font-family: var(--font-display);
   font-size: var(--font-size-3xl);
-  font-weight: 700;
-  color: var(--primary-black);
+  font-weight: 900;
+  color: var(--text-light);
   text-align: center;
   margin-bottom: var(--space-12);
-  letter-spacing: -0.02em;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .faq-list {
@@ -446,7 +474,8 @@
 }
 
 .faq-item {
-  background: white;
+  background: var(--bg-light);
+  border: 2px solid var(--accent-electric);
   border-radius: var(--radius-2xl);
   margin-bottom: var(--space-4);
   box-shadow: var(--shadow-sm);
@@ -455,7 +484,7 @@
 }
 
 .faq-item:hover {
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-neon);
 }
 
 .faq-question {
@@ -466,7 +495,7 @@
   padding: var(--space-6);
   font-size: var(--font-size-lg);
   font-weight: 600;
-  color: var(--primary-black);
+  color: var(--text-light);
   cursor: pointer;
   display: flex;
   justify-content: space-between;
@@ -475,17 +504,18 @@
 }
 
 .faq-question:hover {
-  background: var(--bg-light);
+  background: var(--bg-dark);
 }
 
 .faq-icon {
   font-size: var(--font-size-xl);
   transition: var(--transition-fast);
+  color: var(--accent-electric);
 }
 
 .faq-item.active .faq-icon {
   transform: rotate(45deg);
-  color: var(--accent-red);
+  color: var(--accent-purple);
 }
 
 .faq-answer {
@@ -500,7 +530,30 @@
   animation: fadeInUp 0.3s ease-out;
 }
 
+.faq-item h3 {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--text-light);
+  margin-bottom: var(--space-3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.faq-item p {
+  font-size: var(--font-size-base);
+  color: var(--text-secondary);
+  line-height: var(--line-height-relaxed);
+  margin: 0;
+}
+
 /* Responsive design */
+@media (max-width: 968px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-12);
+  }
+}
+
 @media (max-width: 768px) {
   .contact-hero h1 {
     font-size: clamp(2rem, 5vw, 3rem);

@@ -3,9 +3,9 @@
 /* Cart button in header */
 .cart-btn {
   position: relative;
-  background: var(--bg-light);
-  border: 2px solid var(--border-light);
-  color: var(--text-primary);
+  background: var(--bg-dark);
+  border: 2px solid var(--accent-electric);
+  color: var(--text-light);
   font-weight: 600;
   font-size: var(--font-size-sm);
   padding: var(--space-3);
@@ -18,19 +18,20 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
 }
 
 .cart-btn:hover {
-  background: var(--gradient-brand);
-  color: white;
-  border-color: var(--accent-red);
+  background: var(--accent-electric);
+  color: var(--primary-black);
+  border-color: var(--accent-electric);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-brand);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
 }
 
 /* Cart count badge */
 .cart-count {
-  background: var(--accent-red);
+  background: var(--accent-purple);
   color: white;
   font-size: var(--font-size-xs);
   font-weight: 700;
@@ -44,8 +45,8 @@
   position: absolute;
   top: -8px;
   right: -8px;
-  box-shadow: var(--shadow-sm);
-  animation: pulse 2s infinite;
+  box-shadow: 0 0 10px rgba(157, 76, 221, 0.6);
+  animation: neonPulse 2s infinite;
   z-index: 1;
 }
 
@@ -85,8 +86,9 @@
   right: 0;
   width: 400px;
   height: 100vh;
-  background: white;
-  box-shadow: var(--shadow-2xl);
+  background: var(--primary-black);
+  border-left: 2px solid var(--accent-electric);
+  box-shadow: -20px 0 60px rgba(0, 0, 0, 0.8);
   z-index: var(--z-modal);
   transform: translateX(100%);
   transition: var(--transition-smooth);
@@ -97,6 +99,7 @@
 
 .cart-drawer.active {
   transform: translateX(0);
+  box-shadow: -20px 0 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 255, 255, 0.1);
 }
 
 .cart-drawer-header {

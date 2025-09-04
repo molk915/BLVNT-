@@ -5,12 +5,38 @@ import { CartComponent } from "./components/Cart";
 import { CheckoutPage } from "./pages/Checkout";
 import type { Product } from "./types";
 
-class MaciusWearApp {
+class BLVNTApp {
   private cartComponent: CartComponent;
   private checkoutPage: CheckoutPage | null = null;
   private filteredProducts: Product[] = products;
   private searchTerm: string = "";
   private wishlist: Set<number> = new Set();
+  private currentRoute: string = "home";
+
+  // Route mapping
+  private routes: { [key: string]: string } = {
+    "": "home",
+    home: "home",
+    "strona-glowna": "home",
+    onas: "about",
+    "o-nas": "about",
+    about: "about",
+    kontakt: "contact",
+    contact: "contact",
+    koszyk: "checkout",
+    checkout: "checkout",
+  };
+
+  private getRouteByPage(page: string): string {
+    // Map page names to URL paths
+    const pageToRoute: { [key: string]: string } = {
+      home: "",
+      about: "onas",
+      contact: "kontakt",
+      checkout: "koszyk",
+    };
+    return pageToRoute[page] || "";
+  }
 
   constructor() {
     this.cartComponent = new CartComponent();
@@ -22,14 +48,16 @@ class MaciusWearApp {
     this.setupEventListeners();
     this.renderProducts();
     this.updateCartDisplay();
+    this.setupRouting();
+    this.setupKeyboardNavigation();
 
     // Subscribe to cart updates
     cartService.subscribe(() => {
       this.updateCartDisplay();
     });
 
-    // Automatically navigate to home page on load
-    this.navigateToPage("home");
+    // Handle initial route
+    this.handleRouteChange();
   }
 
   private setupDOM(): void {
@@ -40,7 +68,7 @@ class MaciusWearApp {
       <header class="header">
         <div class="container">
           <div class="nav-brand">
-            <h1>MaciusWear</h1>
+            <h1>BLVNT</h1>
             <span class="tagline">Urban Style Revolution</span>
           </div>
           <nav class="nav">
@@ -101,7 +129,7 @@ class MaciusWearApp {
         <div class="container">
           <div class="footer-content">
             <div class="footer-section">
-              <h3>MaciusWear</h3>
+              <h3>BLVNT</h3>
               <p>Rewolucja w miejskim stylu. Wysokiej jakości streetwear dla nowoczesnych ludzi.</p>
               <div class="social-links">
                 <a href="#" class="social-link">Instagram</a>
@@ -137,7 +165,7 @@ class MaciusWearApp {
             </div>
           </div>
           <div class="footer-bottom">
-            <p>&copy; 2025 MaciusWear. Wszystkie prawa zastrzeżone.</p>
+            <p>&copy; 2025 BLVNT. Wszystkie prawa zastrzeżone.</p>
           </div>
         </div>
       </footer>
@@ -148,8 +176,9 @@ class MaciusWearApp {
     // Navigation
     document.querySelectorAll(".nav-btn").forEach((btn) => {
       btn.addEventListener("click", (e) => {
+        e.preventDefault();
         const page = (e.target as HTMLElement).dataset.page!;
-        this.navigateToPage(page);
+        this.navigateToRoute(this.getRouteByPage(page));
       });
     });
 
@@ -158,7 +187,7 @@ class MaciusWearApp {
       btn.addEventListener("click", (e) => {
         e.preventDefault();
         const page = (e.target as HTMLElement).dataset.page!;
-        this.navigateToPage(page);
+        this.navigateToRoute(this.getRouteByPage(page));
       });
     });
 
@@ -167,7 +196,7 @@ class MaciusWearApp {
       btn.addEventListener("click", (e) => {
         e.preventDefault();
         const category = (e.target as HTMLElement).dataset.category!;
-        this.navigateToPage("home");
+        this.navigateToRoute("");
         setTimeout(() => {
           this.filterByCategory(category);
         }, 100);
@@ -223,35 +252,78 @@ class MaciusWearApp {
         ".newsletter-input"
       ) as HTMLInputElement;
       if (input.value) {
-        alert("Dziękujemy za subskrypcję!");
+        this.showNotification("Dziękujemy za subskrypcję!", "success");
         input.value = "";
       }
     });
   }
 
-  private navigateToPage(page: string): void {
+  private setupRouting(): void {
+    // Listen for popstate events (back/forward buttons)
+    window.addEventListener("popstate", () => {
+      this.handleRouteChange();
+    });
+  }
+
+  private handleRouteChange(): void {
+    const path = window.location.pathname.substring(1); // Remove leading slash
+    const route = this.routes[path] || "home";
+    this.currentRoute = route;
+    this.navigateToPage(route, false); // false = don't push to history
+  }
+
+  private navigateToRoute(path: string): void {
+    const route = this.routes[path] || "home";
+
+    // Update URL without triggering page refresh
+    const newUrl = path === "home" || path === "" ? "/" : `/${path}`;
+    if (window.location.pathname !== newUrl) {
+      window.history.pushState({ route }, "", newUrl);
+    }
+
+    this.currentRoute = route;
+    this.navigateToPage(route, false);
+  }
+
+  private navigateToPage(page: string, pushToHistory: boolean = true): void {
+    // Smooth scroll to top when changing pages
+    this.scrollToTop();
+
     // Update active nav button
     document.querySelectorAll(".nav-btn").forEach((btn) => {
       btn.classList.remove("active");
     });
     document.querySelector(`[data-page="${page}"]`)?.classList.add("active");
 
-    switch (page) {
-      case "home":
-        this.renderHomePage();
-        break;
-      case "about":
-        this.renderAboutPage();
-        break;
-      case "contact":
-        this.renderContactPage();
-        break;
-      case "checkout":
-        this.renderCheckoutPage();
-        break;
-      default:
-        this.renderHomePage();
+    // Add loading state
+    this.showPageLoadingState();
+
+    if (pushToHistory) {
+      this.navigateToRoute(page);
     }
+
+    // Small delay for smooth transition effect
+    setTimeout(() => {
+      switch (page) {
+        case "home":
+          this.renderHomePage();
+          break;
+        case "about":
+          this.renderAboutPage();
+          break;
+        case "contact":
+          this.renderContactPage();
+          break;
+        case "checkout":
+          this.renderCheckoutPage();
+          break;
+        default:
+          this.renderHomePage();
+      }
+
+      // Remove loading state
+      this.hidePageLoadingState();
+    }, 150);
   }
 
   private renderHomePage(): void {
@@ -261,7 +333,7 @@ class MaciusWearApp {
       <!-- Hero Section -->
       <section class="hero">
         <div class="hero-content">
-          <h1 class="hero-title">MaciusWear 2025</h1>
+          <h1 class="hero-title">BLVNT 2025</h1>
           <p class="hero-subtitle">Odkryj najnowsze trendy w streetwear</p>
           <button class="hero-btn" onclick="document.getElementById('products').scrollIntoView()">
             Kolekcja
@@ -289,7 +361,7 @@ class MaciusWearApp {
         <div class="container">
           <div class="about-preview-content">
             <div class="about-preview-text">
-              <h2>O MaciusWear</h2>
+              <h2>O BLVNT</h2>
               <p>Jesteśmy polską marką streetwear, która łączy urban style z najwyższą jakością wykonania. Nasze produkty to efekt pasji do mody ulicznej i dbałości o każdy szczegół.</p>
               <button class="btn-secondary" data-page="about">Poznaj nas lepiej</button>
             </div>
@@ -314,7 +386,7 @@ class MaciusWearApp {
       <!-- Lookbook -->
       <section class="lookbook">
         <div class="container">
-          <h2 class="section-title">Lookbook 2025</h2>
+          <h2 class="section-title"></h2>
           <div class="lookbook-grid">
             <div class="lookbook-item">
               <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=500&fit=crop" alt="Urban Look 1">
@@ -390,7 +462,7 @@ class MaciusWearApp {
       .querySelector('[data-page="about"]')
       ?.addEventListener("click", (e) => {
         e.preventDefault();
-        this.navigateToPage("about");
+        this.navigateToRoute("onas");
       });
   }
 
@@ -470,7 +542,7 @@ class MaciusWearApp {
     mainContent.innerHTML = `
       <section class="about-hero">
         <div class="container">
-          <h1>O MaciusWear</h1>
+          <h1>O BLVNT</h1>
           <p class="about-subtitle">Polska marka streetwear z pasją do miejskiego stylu</p>
         </div>
       </section>
@@ -480,12 +552,12 @@ class MaciusWearApp {
           <div class="about-story">
             <div class="about-text">
               <h2>Nasza Historia</h2>
-              <p>MaciusWear powstało z pasji do streetwear i chęci stworzenia czegoś wyjątkowego na polskim rynku. Jesteśmy młodą marką, która łączy nowoczesne trendy z wysoką jakością wykonania.</p>
+              <p>BLVNT powstało z pasji do streetwear i chęci stworzenia czegoś wyjątkowego na polskim rynku. Jesteśmy młodą marką, która łączy nowoczesne trendy z wysoką jakością wykonania.</p>
               <p>Nasze produkty to nie tylko ubrania - to sposób wyrażenia siebie, manifestacja stylu i przynależności do społeczności ludzi ceniących urban fashion.</p>
               <p>Każdy element naszej kolekcji jest starannie przemyślany i wykonany z dbałością o najmniejsze szczegóły.</p>
             </div>
             <div class="about-image">
-              <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=500&h=600&fit=crop" alt="MaciusWear Team">
+              <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=500&h=600&fit=crop" alt="BLVNT Team">
             </div>
           </div>
 
@@ -561,8 +633,8 @@ class MaciusWearApp {
                 <div class="contact-icon">📧</div>
                 <div class="contact-details">
                   <h3>Email</h3>
-                  <p>kontakt@maciuswear.pl</p>
-                  <p>sklep@maciuswear.pl</p>
+                  <p>kontakt@blvnt.pl</p>
+                  <p>sklep@blvnt.pl</p>
                 </div>
               </div>
 
@@ -684,7 +756,10 @@ class MaciusWearApp {
     const form = document.getElementById("contactForm");
     form?.addEventListener("submit", (e) => {
       e.preventDefault();
-      alert("Dziękujemy za wiadomość! Odpowiemy najszybciej jak to możliwe.");
+      this.showNotification(
+        "Dziękujemy za wiadomość! Odpowiemy najszybciej jak to możliwe.",
+        "success"
+      );
       (e.target as HTMLFormElement).reset();
     });
   }
@@ -841,15 +916,8 @@ class MaciusWearApp {
     if (product) {
       cartService.addItem(product);
 
-      // Show success animation
-      const notification = document.createElement("div");
-      notification.className = "cart-notification";
-      notification.textContent = "Dodano do koszyka!";
-      document.body.appendChild(notification);
-
-      setTimeout(() => {
-        notification.remove();
-      }, 2000);
+      // Show enhanced notification
+      this.showNotification(`${product.name} dodano do koszyka!`, "success");
     }
   }
 
@@ -897,7 +965,7 @@ class MaciusWearApp {
 
   public goToCheckout(): void {
     this.hideCart();
-    this.navigateToPage("checkout");
+    this.navigateToRoute("koszyk");
   }
 
   public updateCartModal(): void {
@@ -906,10 +974,134 @@ class MaciusWearApp {
       this.cartComponent.renderModal(content);
     }
   }
+
+  // Enhanced Navigation Methods
+  private scrollToTop(): void {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }
+
+  private showPageLoadingState(): void {
+    const mainContent = document.getElementById("mainContent");
+    if (mainContent) {
+      mainContent.style.opacity = "0.7";
+      mainContent.style.transition = "opacity 0.15s ease";
+      mainContent.style.pointerEvents = "none";
+    }
+  }
+
+  private hidePageLoadingState(): void {
+    const mainContent = document.getElementById("mainContent");
+    if (mainContent) {
+      mainContent.style.opacity = "1";
+      mainContent.style.pointerEvents = "auto";
+    }
+  }
+
+  // Enhanced User Experience Methods
+  public showNotification(
+    message: string,
+    type: "success" | "error" | "info" = "success"
+  ): void {
+    const notification = document.createElement("div");
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+      <span class="notification-message">${message}</span>
+      <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
+    `;
+
+    document.body.appendChild(notification);
+
+    // Animate in
+    setTimeout(() => notification.classList.add("show"), 10);
+
+    // Auto remove after 4 seconds
+    setTimeout(() => {
+      if (notification.parentElement) {
+        notification.classList.remove("show");
+        setTimeout(() => notification.remove(), 300);
+      }
+    }, 4000);
+  }
+
+  // Improved Search with History
+  public performAdvancedSearch(query: string, category?: string): Product[] {
+    let results = products;
+
+    // Filter by category if specified
+    if (category && category !== "wszystkie") {
+      results = results.filter((product) => product.category === category);
+    }
+
+    // Search in name, description, and tags
+    if (query && query.length >= 2) {
+      const searchTerm = query.toLowerCase();
+      results = results.filter(
+        (product) =>
+          product.name.toLowerCase().includes(searchTerm) ||
+          product.description.toLowerCase().includes(searchTerm) ||
+          product.category.toLowerCase().includes(searchTerm)
+      );
+    }
+
+    return results;
+  }
+
+  // Keyboard Navigation Support
+  private setupKeyboardNavigation(): void {
+    document.addEventListener("keydown", (e) => {
+      // ESC key closes modals
+      if (e.key === "Escape") {
+        if (
+          document.getElementById("cartModal")?.classList.contains("active")
+        ) {
+          this.hideCart();
+        } else if (
+          document.getElementById("searchModal")?.classList.contains("active")
+        ) {
+          this.hideSearchModal();
+        } else if (
+          document.getElementById("quickviewModal")?.style.display === "block"
+        ) {
+          this.hideQuickView();
+        }
+      }
+
+      // Ctrl/Cmd + K opens search
+      if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+        e.preventDefault();
+        this.showSearchModal();
+      }
+
+      // Navigation shortcuts
+      if (e.altKey) {
+        switch (e.key) {
+          case "h":
+            e.preventDefault();
+            this.navigateToRoute("");
+            break;
+          case "a":
+            e.preventDefault();
+            this.navigateToRoute("onas");
+            break;
+          case "c":
+            e.preventDefault();
+            this.navigateToRoute("kontakt");
+            break;
+          case "k":
+            e.preventDefault();
+            this.navigateToRoute("koszyk");
+            break;
+        }
+      }
+    });
+  }
 }
 
 // Initialize the app
-const app = new MaciusWearApp();
+const app = new BLVNTApp();
 
 // Make app and cartService globally available for onclick handlers
 (window as any).app = app;

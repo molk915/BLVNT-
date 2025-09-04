@@ -43,11 +43,10 @@ export class OrderService {
     }
     return false;
   }
-
   private generateOrderId(): string {
     const timestamp = Date.now().toString();
     const random = Math.random().toString(36).substr(2, 9);
-    return `MW-${timestamp.slice(-6)}-${random.toUpperCase()}`;
+    return `BLVNT-${timestamp.slice(-6)}-${random.toUpperCase()}`;
   }
 
   private sendOrderConfirmationEmail(order: Order): void {
@@ -56,13 +55,11 @@ export class OrderService {
     console.log(`Order ID: ${order.id}`);
     console.log(`Total: ${order.total.toFixed(2)} zł`);
   }
-
   private saveOrders(): void {
-    localStorage.setItem("maciuswear-orders", JSON.stringify(this.orders));
+    localStorage.setItem("blvnt-orders", JSON.stringify(this.orders));
   }
-
   private loadOrders(): void {
-    const savedOrders = localStorage.getItem("maciuswear-orders");
+    const savedOrders = localStorage.getItem("blvnt-orders");
     if (savedOrders) {
       try {
         this.orders = JSON.parse(savedOrders).map((order: any) => ({

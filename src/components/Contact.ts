@@ -17,11 +17,10 @@ export class ContactComponent {
               <h2>Informacje kontaktowe</h2>
               
               <div class="contact-item">
-                <div class="contact-icon">📧</div>
-                <div class="contact-details">
+                <div class="contact-icon">📧</div>                <div class="contact-details">
                   <h3>Email</h3>
-                  <p>kontakt@maciuswear.pl</p>
-                  <p>sklep@maciuswear.pl</p>
+                  <p>kontakt@blvnt.pl</p>
+                  <p>sklep@blvnt.pl</p>
                 </div>
               </div>
 

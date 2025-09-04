@@ -14,11 +14,11 @@
 
 @keyframes glow {
   0% {
-    text-shadow: 0 0 20px rgba(255, 51, 102, 0.5);
+    text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
   }
   100% {
-    text-shadow: 0 0 30px rgba(255, 51, 102, 0.8),
-      0 0 40px rgba(255, 107, 53, 0.6);
+    text-shadow: 0 0 30px rgba(0, 255, 255, 0.8),
+      0 0 40px rgba(157, 76, 221, 0.6);
   }
 }
 
@@ -327,6 +327,110 @@
   }
 }
 
+/* BLVNT Street Culture Animations */
+@keyframes neonPulse {
+  0% {
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+    text-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(0, 255, 255, 0.8);
+    text-shadow: 0 0 30px rgba(0, 255, 255, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+    text-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+  }
+}
+
+@keyframes neonGlow {
+  0% {
+    filter: brightness(1) drop-shadow(0 0 10px rgba(0, 255, 255, 0.5));
+  }
+  100% {
+    filter: brightness(1.2) drop-shadow(0 0 30px rgba(0, 255, 255, 0.8));
+  }
+}
+
+@keyframes streetSlide {
+  0% {
+    transform: translateX(-100px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes undergroundFade {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes logoGlow {
+  0% {
+    background-position: 0% 50%;
+    text-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+  }
+  25% {
+    text-shadow: 0 0 30px rgba(0, 255, 255, 0.8);
+  }
+  50% {
+    background-position: 100% 50%;
+    text-shadow: 0 0 40px rgba(157, 76, 221, 0.6);
+  }
+  75% {
+    text-shadow: 0 0 30px rgba(157, 76, 221, 0.8);
+  }
+  100% {
+    background-position: 0% 50%;
+    text-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+  }
+}
+
+@keyframes staticNoise {
+  0% {
+    opacity: 0.1;
+  }
+  10% {
+    opacity: 0.3;
+  }
+  20% {
+    opacity: 0.05;
+  }
+  30% {
+    opacity: 0.2;
+  }
+  40% {
+    opacity: 0.1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  60% {
+    opacity: 0.05;
+  }
+  70% {
+    opacity: 0.25;
+  }
+  80% {
+    opacity: 0.1;
+  }
+  90% {
+    opacity: 0.35;
+  }
+  100% {
+    opacity: 0.1;
+  }
+}
+
 /* Utility animation classes */
 .animate-fade-in {
   animation: fadeIn 0.5s ease-out forwards;
@@ -382,6 +486,30 @@
 
 .animate-spin {
   animation: spin 1s linear infinite;
+}
+
+.animate-neon-pulse {
+  animation: neonPulse 2s ease-in-out infinite;
+}
+
+.animate-neon-glow {
+  animation: neonGlow 3s ease-in-out infinite alternate;
+}
+
+.animate-street-slide {
+  animation: streetSlide 0.8s ease-out;
+}
+
+.animate-underground-fade {
+  animation: undergroundFade 1s ease-out;
+}
+
+.animate-logo-glow {
+  animation: logoGlow 4s ease-in-out infinite;
+}
+
+.animate-static {
+  animation: staticNoise 0.1s infinite;
 }
 
 /* Hover animations */
@@ -473,5 +601,172 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* Notification Styles */
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 10000;
+  background: var(--bg-light);
+  border: 2px solid var(--accent-electric);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-6);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-width: 300px;
+  max-width: 500px;
+  box-shadow: var(--shadow-xl);
+  backdrop-filter: blur(10px);
+  transform: translateX(120%);
+  opacity: 0;
+  transition: var(--transition-smooth);
+  font-weight: 600;
+}
+
+.notification.show {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.notification-success {
+  border-color: var(--accent-electric);
+  background: var(--bg-glass);
+  color: var(--text-light);
+}
+
+.notification-success .notification-message {
+  color: var(--accent-electric);
+}
+
+.notification-error {
+  border-color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.1);
+  color: #ff6b6b;
+}
+
+.notification-info {
+  border-color: var(--accent-purple);
+  background: rgba(157, 76, 221, 0.1);
+  color: var(--accent-purple);
+}
+
+.notification-message {
+  flex: 1;
+  font-size: var(--font-size-sm);
+  letter-spacing: 0.5px;
+}
+
+.notification-close {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: var(--font-size-lg);
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: var(--transition-fast);
+}
+
+.notification-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
+}
+
+/* Enhanced Loading States */
+.page-loading {
+  position: relative;
+}
+
+.page-loading::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 255, 255, 0.1) 50%,
+    transparent 100%
+  );
+  animation: shimmer 1.5s infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Smooth transitions for page changes */
+.main {
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.main.loading {
+  opacity: 0.7;
+  transform: translateY(10px);
+  pointer-events: none;
+}
+
+/* Enhanced hover effects */
+.nav-btn,
+.btn-primary,
+.btn-secondary,
+.filter-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-btn::before,
+.btn-primary::before,
+.btn-secondary::before,
+.filter-btn::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(
+    circle,
+    rgba(0, 255, 255, 0.3) 0%,
+    transparent 70%
+  );
+  transition: var(--transition-fast);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.nav-btn:hover::before,
+.btn-primary:hover::before,
+.btn-secondary:hover::before,
+.filter-btn:hover::before {
+  width: 200px;
+  height: 200px;
+}
+
+/* Responsive notifications */
+@media (max-width: 768px) {
+  .notification {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    min-width: auto;
+    max-width: none;
+    transform: translateY(-120%);
+  }
+
+  .notification.show {
+    transform: translateY(0);
   }
 }

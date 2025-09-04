@@ -2,7 +2,7 @@
 
 .checkout-container {
   min-height: 100vh;
-  background: var(--bg-light);
+  background: var(--bg-dark);
   padding: calc(var(--header-height) + var(--space-8)) 0 var(--space-12);
 }
 
@@ -14,10 +14,15 @@
 .checkout-title {
   font-family: var(--font-display);
   font-size: var(--font-size-4xl);
-  font-weight: 700;
-  color: var(--primary-black);
+  font-weight: 900;
+  color: var(--text-light);
   margin-bottom: var(--space-4);
-  letter-spacing: -0.02em;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .checkout-subtitle {
@@ -25,15 +30,19 @@
   color: var(--text-secondary);
   max-width: 600px;
   margin: 0 auto;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: var(--font-street);
 }
 
 /* Checkout progress */
 .checkout-progress {
-  background: white;
+  background: var(--primary-black);
+  border: 2px solid var(--accent-electric);
   border-radius: var(--radius-2xl);
   padding: var(--space-6);
   margin-bottom: var(--space-8);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
 }
 
 .progress-steps {

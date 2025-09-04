@@ -74,13 +74,11 @@ export class CartService {
     this.saveCart();
     this.notifyListeners();
   }
-
   private saveCart(): void {
-    localStorage.setItem("maciuswear-cart", JSON.stringify(this.items));
+    localStorage.setItem("blvnt-cart", JSON.stringify(this.items));
   }
-
   private loadCart(): void {
-    const savedCart = localStorage.getItem("maciuswear-cart");
+    const savedCart = localStorage.getItem("blvnt-cart");
     if (savedCart) {
       try {
         this.items = JSON.parse(savedCart);
