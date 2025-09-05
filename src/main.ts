@@ -13,7 +13,6 @@ class BLVNTApp {
   private filteredProducts: Product[] = products;
   private searchTerm: string = "";
   private wishlist: Set<number> = new Set();
-  private currentRoute: string = "home";
 
   // Route mapping
   private routes: { [key: string]: string } = {
@@ -370,7 +369,6 @@ class BLVNTApp {
   private handleRouteChange(): void {
     const path = window.location.pathname.substring(1); // Remove leading slash
     const route = this.routes[path] || "home";
-    this.currentRoute = route;
     this.navigateToPage(route, false); // false = don't push to history
   }
 
@@ -392,7 +390,6 @@ class BLVNTApp {
       window.history.pushState({ route }, "", newUrl);
     }
 
-    this.currentRoute = route;
     this.navigateToPage(route, false);
   }
 
@@ -900,6 +897,7 @@ class BLVNTApp {
     } else {
       this.filteredProducts = products.filter(
         (product) =>
+          product.category === category &&
           product.category === category &&
           (product.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
             product.description
