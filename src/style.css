@@ -19,6 +19,7 @@
 @import url("./styles/about.css");
 @import url("./styles/contact.css");
 @import url("./styles/checkout.css");
+@import url("./styles/order-confirmation.css");
 
 /* Component styles */
 @import url("./styles/products.css");
@@ -29,3 +30,5 @@
 /* Utility styles */
 @import url("./styles/animations.css");
 @import url("./styles/responsive.css");
+
+/* Note: test-style.css intentionally removed from imports. */

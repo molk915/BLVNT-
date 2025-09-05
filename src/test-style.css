@@ -1,0 +1,11 @@
+/* Test file to check CSS loading */
+body {
+  background-color: red !important;
+  color: white !important;
+}
+
+h1 {
+  background-color: blue !important;
+  color: yellow !important;
+  padding: 20px !important;
+}

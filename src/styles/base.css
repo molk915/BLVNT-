@@ -23,6 +23,30 @@ body {
     );
 }
 
+body::after {
+  content: "";
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(
+      circle at 15% 85%,
+      rgba(0, 255, 255, 0.06),
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at 85% 15%,
+      rgba(157, 76, 221, 0.05),
+      transparent 55%
+    );
+  z-index: -1;
+}
+
+/* Global focus ring for accessibility */
+:focus-visible {
+  outline: 2px solid var(--accent-electric);
+  outline-offset: 3px;
+}
+
 /* Container */
 .container {
   max-width: var(--container-max-width);
@@ -104,17 +128,18 @@ h6 {
 p {
   margin: 0 0 var(--space-4) 0;
   line-height: var(--line-height-relaxed);
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
 }
 
 /* Link styles */
 a {
-  color: var(--accent-red);
+  color: var(--accent-electric);
   text-decoration: none;
   transition: all var(--transition-normal);
 }
 
 a:hover {
-  color: var(--accent-red-dark);
+  color: var(--text-light);
   text-decoration: underline;
 }
 
@@ -602,4 +627,36 @@ li {
   box-shadow: 0 0 30px rgba(0, 255, 255, 0.8);
   text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
   transform: translateY(-2px);
+}
+
+/* Glass utility classes */
+.glass-card {
+  background: var(--bg-glass);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  border-radius: var(--radius-xl);
+}
+
+.glass-card.alt {
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+}
+
+/* Accent outline utility */
+.outline-accent {
+  outline: 2px solid var(--accent-electric);
+  outline-offset: 2px;
+}
+
+/* Button hover lift shared */
+.button-hover-lift {
+  transition: var(--transition-smooth);
+}
+
+.button-hover-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px -6px rgba(0, 255, 255, 0.3);
 }

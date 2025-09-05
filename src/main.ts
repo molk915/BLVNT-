@@ -3,11 +3,13 @@ import { products } from "./services/products";
 import { cartService } from "./services/cart";
 import { CartComponent } from "./components/Cart";
 import { CheckoutPage } from "./pages/Checkout";
+import { OrderConfirmationPage } from "./pages/OrderConfirmation";
 import type { Product } from "./types";
 
 class BLVNTApp {
   private cartComponent: CartComponent;
   private checkoutPage: CheckoutPage | null = null;
+  private orderConfirmationPage: OrderConfirmationPage | null = null;
   private filteredProducts: Product[] = products;
   private searchTerm: string = "";
   private wishlist: Set<number> = new Set();
@@ -57,7 +59,11 @@ class BLVNTApp {
     });
 
     // Handle initial route
-    this.handleRouteChange();
+    if (window.location.hash) {
+      this.handleHashChange();
+    } else {
+      this.handleRouteChange();
+    }
   }
 
   private setupDOM(): void {
@@ -80,8 +86,28 @@ class BLVNTApp {
               🛒 <span class="cart-count" id="cartCount">0</span>
             </button>
           </nav>
+
+          <!-- Mobile menu toggle (visible only on small screens via CSS) -->
+          <button class="mobile-menu-toggle" id="mobileToggle" aria-label="Menu mobilne" aria-expanded="false" aria-controls="mobileNav">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
         </div>
       </header>
+
+      <!-- Mobile nav (slides down when active) -->
+      <div class="mobile-nav" id="mobileNav" aria-hidden="true">
+        <div class="mobile-nav-list">
+          <button class="mobile-nav-item" data-page="home">Strona Główna</button>
+          <button class="mobile-nav-item" data-page="about">O Nas</button>
+          <button class="mobile-nav-item" data-page="contact">Kontakt</button>
+          <button class="mobile-nav-item" data-page="checkout">Koszyk</button>
+        </div>
+      </div>
+
+      <!-- Floating search button for mobile when header is hidden -->
+      <button id="mobileSearchFloat" class="mobile-search-floating" aria-label="Szukaj mobilnie" style="display:none">🔍</button>
 
       <!-- Search Modal -->
       <div class="modal-overlay" id="searchModal">
@@ -256,12 +282,88 @@ class BLVNTApp {
         input.value = "";
       }
     });
+
+    // Mobile menu toggle
+    document.getElementById("mobileToggle")?.addEventListener("click", () => {
+      const btn = document.getElementById("mobileToggle")!;
+      const nav = document.getElementById("mobileNav")!;
+      const header = document.querySelector<HTMLElement>(".header");
+      const floatSearch = document.getElementById("mobileSearchFloat");
+      const isActive = nav.classList.toggle("active");
+      btn.classList.toggle("active", isActive);
+      btn.setAttribute("aria-expanded", String(isActive));
+      nav.setAttribute("aria-hidden", String(!isActive));
+      // Lock body scroll when menu is open
+      document.body.classList.toggle("no-scroll", isActive);
+      // On small screens hide the fixed header to avoid double chrome
+      if (header && window.matchMedia("(max-width: 920px)").matches) {
+        header.classList.toggle("hidden", isActive);
+      }
+      // Show floating search button when header is hidden (so only search remains visible)
+      if (floatSearch) {
+        floatSearch.style.display = isActive ? "flex" : "none";
+      }
+    });
+
+    // Mobile nav item clicks
+    document.querySelectorAll(".mobile-nav-item").forEach((item) => {
+      item.addEventListener("click", (ev) => {
+        ev.preventDefault();
+        const page = (ev.target as HTMLElement).dataset.page!;
+        // Navigate and close mobile menu
+        this.navigateToRoute(this.getRouteByPage(page));
+        const nav = document.getElementById("mobileNav");
+        const toggle = document.getElementById("mobileToggle");
+        nav?.classList.remove("active");
+        toggle?.classList.remove("active");
+        toggle?.setAttribute("aria-expanded", "false");
+        nav?.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("no-scroll");
+        document.querySelector(".header")?.classList.remove("hidden");
+        // hide floating search
+        document
+          .getElementById("mobileSearchFloat")
+          ?.style.setProperty("display", "none");
+      });
+    });
+
+    // Close mobile nav when tapping outside (on small screens)
+    window.addEventListener("click", (e) => {
+      const target = e.target as HTMLElement;
+      const nav = document.getElementById("mobileNav");
+      const toggle = document.getElementById("mobileToggle");
+      const floatSearch = document.getElementById("mobileSearchFloat");
+      if (!nav || !toggle) return;
+      if (!nav.classList.contains("active")) return;
+      if (target.closest(".mobile-nav") || target.closest("#mobileToggle"))
+        return;
+      // clicked outside -> close
+      nav.classList.remove("active");
+      toggle.classList.remove("active");
+      toggle.setAttribute("aria-expanded", "false");
+      nav.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("no-scroll");
+      document.querySelector(".header")?.classList.remove("hidden");
+      if (floatSearch) floatSearch.style.display = "none";
+    });
+
+    // Mobile floating search opens search modal
+    document
+      .getElementById("mobileSearchFloat")
+      ?.addEventListener("click", () => {
+        this.showSearchModal();
+      });
   }
 
   private setupRouting(): void {
     // Listen for popstate events (back/forward buttons)
     window.addEventListener("popstate", () => {
       this.handleRouteChange();
+    });
+
+    // Listen for hash changes for order confirmation
+    window.addEventListener("hashchange", () => {
+      this.handleHashChange();
     });
   }
 
@@ -270,6 +372,15 @@ class BLVNTApp {
     const route = this.routes[path] || "home";
     this.currentRoute = route;
     this.navigateToPage(route, false); // false = don't push to history
+  }
+
+  private handleHashChange(): void {
+    const hash = window.location.hash.substring(1); // Remove # symbol
+
+    if (hash.startsWith("order-confirmation/")) {
+      const orderId = hash.replace("order-confirmation/", "");
+      this.renderOrderConfirmationPage(orderId);
+    }
   }
 
   private navigateToRoute(path: string): void {
@@ -384,31 +495,37 @@ class BLVNTApp {
       </section>
 
       <!-- Lookbook -->
-      <section class="lookbook">
+      <section class="lookbook" aria-labelledby="lookbook-heading">
         <div class="container">
-          <h2 class="section-title"></h2>
+          <h2 id="lookbook-heading" class="section-title">Lookbook</h2>
           <div class="lookbook-grid">
-            <div class="lookbook-item">
-              <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=500&fit=crop" alt="Urban Look 1">
-              <div class="lookbook-overlay">
-                <h3>Urban Casual</h3>
-                <p>Codzienny streetwear</p>
+            <figure class="lookbook-item" tabindex="0" aria-label="Urban Casual – Codzienny streetwear">
+              <div class="lookbook-media">
+                <img loading="lazy" src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&h=1000&fit=crop" alt="Model w stylu Urban Casual" />
+                <figcaption class="lookbook-overlay">
+                  <h3>Urban Casual</h3>
+                  <p>Codzienny streetwear</p>
+                </figcaption>
               </div>
-            </div>
-            <div class="lookbook-item">
-              <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=400&h=500&fit=crop" alt="Urban Look 2">
-              <div class="lookbook-overlay">
-                <h3>Tech Wear</h3>
-                <p>Futurystyczny styl</p>
+            </figure>
+            <figure class="lookbook-item" tabindex="0" aria-label="Tech Wear – Futurystyczny styl">
+              <div class="lookbook-media">
+                <img loading="lazy" src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=800&h=1000&fit=crop" alt="Model w stylu Tech Wear" />
+                <figcaption class="lookbook-overlay">
+                  <h3>Tech Wear</h3>
+                  <p>Futurystyczny styl</p>
+                </figcaption>
               </div>
-            </div>
-            <div class="lookbook-item">
-              <img src="https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=400&h=500&fit=crop" alt="Urban Look 3">
-              <div class="lookbook-overlay">
-                <h3>Minimalist</h3>
-                <p>Czysty design</p>
+            </figure>
+            <figure class="lookbook-item" tabindex="0" aria-label="Minimalist – Czysty design">
+              <div class="lookbook-media">
+                <img loading="lazy" src="https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=800&h=1000&fit=crop" alt="Model w minimalistycznym stroju" />
+                <figcaption class="lookbook-overlay">
+                  <h3>Minimalist</h3>
+                  <p>Czysty design</p>
+                </figcaption>
               </div>
-            </div>
+            </figure>
           </div>
         </div>
       </section>
@@ -750,6 +867,13 @@ class BLVNTApp {
       this.checkoutPage = new CheckoutPage();
     }
     this.checkoutPage.render();
+  }
+
+  private renderOrderConfirmationPage(orderId: string): void {
+    if (!this.orderConfirmationPage) {
+      this.orderConfirmationPage = new OrderConfirmationPage();
+    }
+    this.orderConfirmationPage.render(orderId);
   }
 
   private setupContactFormListener(): void {
