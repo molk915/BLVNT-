@@ -498,7 +498,7 @@ class BLVNTApp {
           <div class="lookbook-grid">
             <figure class="lookbook-item" tabindex="0" aria-label="Urban Casual – Codzienny streetwear">
               <div class="lookbook-media">
-                <img loading="lazy" src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&h=1000&fit=crop" alt="Model w stylu Urban Casual" />
+                <img loading="lazy" src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=800&h=1000&fit=crop" alt="Model w stylu Urban Casual" />
                 <figcaption class="lookbook-overlay">
                   <h3>Urban Casual</h3>
                   <p>Codzienny streetwear</p>
@@ -507,16 +507,16 @@ class BLVNTApp {
             </figure>
             <figure class="lookbook-item" tabindex="0" aria-label="Tech Wear – Futurystyczny styl">
               <div class="lookbook-media">
-                <img loading="lazy" src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=800&h=1000&fit=crop" alt="Model w stylu Tech Wear" />
+                <img loading="lazy" src="https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=800&h=1000&fit=crop" alt="Model w stylu Tech Wear" />
                 <figcaption class="lookbook-overlay">
-                  <h3>Tech Wear</h3>
-                  <p>Futurystyczny styl</p>
+                  <h3>Premium Basics</h3>
+                  <p>Wysokiej jakości klasyka</p>
                 </figcaption>
               </div>
             </figure>
             <figure class="lookbook-item" tabindex="0" aria-label="Minimalist – Czysty design">
               <div class="lookbook-media">
-                <img loading="lazy" src="https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=800&h=1000&fit=crop" alt="Model w minimalistycznym stroju" />
+                <img loading="lazy" src="https://images.unsplash.com/photo-1445205170230-053b83016050?w=800&h=1000&fit=crop" alt="Model w minimalistycznym stroju" />
                 <figcaption class="lookbook-overlay">
                   <h3>Minimalist</h3>
                   <p>Czysty design</p>
@@ -589,20 +589,22 @@ class BLVNTApp {
     featuredGrid.innerHTML = featuredProducts
       .map(
         (product) => `
-      <div class="featured-card">
+      <div class="featured-card" onclick="app.openProductModal(${
+        product.id
+      })" style="cursor: pointer;">
         <div class="featured-image">
           <img src="${product.image}" alt="${product.name}">
           <button class="wishlist-btn ${
             this.wishlist.has(product.id) ? "active" : ""
           }" 
-                  onclick="app.toggleWishlist(${product.id})">♥</button>
+                  onclick="event.stopPropagation(); app.toggleWishlist(${
+                    product.id
+                  })">♥</button>
         </div>
         <div class="featured-info">
           <h3>${product.name}</h3>
           <p class="featured-price">${product.price.toFixed(2)} zł</p>
-          <button class="btn-primary" onclick="app.addToCart(${product.id})">
-            Dodaj do koszyka
-          </button>
+          <p class="product-click-hint">Kliknij aby wybrać rozmiar</p>
         </div>
       </div>
     `
@@ -617,11 +619,13 @@ class BLVNTApp {
     productsGrid.innerHTML = this.filteredProducts
       .map(
         (product) => `
-      <div class="product-card">
+      <div class="product-card" onclick="app.openProductModal(${
+        product.id
+      })" style="cursor: pointer;">
         <div class="product-image">
           <img src="${product.image}" alt="${product.name}">
           <div class="product-overlay">
-            <button class="quick-view-btn" onclick="app.showQuickView(${
+            <button class="quick-view-btn" onclick="event.stopPropagation(); app.showQuickView(${
               product.id
             })">
               Szybki podgląd
@@ -629,7 +633,9 @@ class BLVNTApp {
             <button class="wishlist-btn ${
               this.wishlist.has(product.id) ? "active" : ""
             }" 
-                    onclick="app.toggleWishlist(${product.id})">♥</button>
+                    onclick="event.stopPropagation(); app.toggleWishlist(${
+                      product.id
+                    })">♥</button>
           </div>
         </div>
         <div class="product-info">
@@ -637,11 +643,7 @@ class BLVNTApp {
           <p class="product-description">${product.description}</p>
           <div class="product-footer">
             <span class="product-price">${product.price.toFixed(2)} zł</span>
-            <button class="add-to-cart-btn" onclick="app.addToCart(${
-              product.id
-            })">
-              Dodaj do koszyka
-            </button>
+            <p class="product-click-hint">Kliknij aby wybrać rozmiar</p>
           </div>
         </div>
       </div>
@@ -671,7 +673,7 @@ class BLVNTApp {
               <p>Każdy element naszej kolekcji jest starannie przemyślany i wykonany z dbałością o najmniejsze szczegóły.</p>
             </div>
             <div class="about-image">
-              <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=500&h=600&fit=crop" alt="BLVNT Team">
+              <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?w=500&h=600&fit=crop" alt="BLVNT Team">
             </div>
           </div>
 
@@ -1040,6 +1042,94 @@ class BLVNTApp {
 
       // Show enhanced notification
       this.showNotification(`${product.name} dodano do koszyka!`, "success");
+    }
+  }
+
+  public openProductModal(productId: number): void {
+    const product = products.find((p) => p.id === productId);
+    if (!product) return;
+
+    const modal = document.createElement("div");
+    modal.className = "product-modal";
+    modal.innerHTML = `
+      <div class="product-modal-backdrop" onclick="this.closest('.product-modal').remove()"></div>
+      <div class="product-modal-content">
+        <button class="product-modal-close" onclick="this.closest('.product-modal').remove()">&times;</button>
+        <div class="product-modal-grid">
+          <div class="product-modal-image">
+            <img src="${product.image}" alt="${product.name}">
+          </div>
+          <div class="product-modal-info">
+            <h2 class="product-modal-name">${product.name}</h2>
+            <p class="product-modal-description">${product.description}</p>
+            <p class="product-modal-price">${product.price.toFixed(2)} zł</p>
+            
+            <div class="size-selection">
+              <h3>Wybierz rozmiar:</h3>
+              <div class="size-options">
+                <button class="size-btn" data-size="S">S</button>
+                <button class="size-btn" data-size="M">M</button>
+                <button class="size-btn" data-size="L">L</button>
+                <button class="size-btn" data-size="XL">XL</button>
+                <button class="size-btn" data-size="XXL">XXL</button>
+              </div>
+            </div>
+            
+            <button class="btn-primary add-to-cart-final" disabled onclick="app.addToCartWithSize(${productId}, this)">
+              Dodaj do koszyka
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    // Setup size selection
+    const sizeButtons = modal.querySelectorAll(".size-btn");
+    const addToCartBtn = modal.querySelector(
+      ".add-to-cart-final"
+    ) as HTMLButtonElement;
+
+    sizeButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        sizeButtons.forEach((b) => b.classList.remove("selected"));
+        btn.classList.add("selected");
+        addToCartBtn.disabled = false;
+      });
+    });
+  }
+
+  public addToCartWithSize(
+    productId: number,
+    buttonElement: HTMLElement
+  ): void {
+    const modal = buttonElement.closest(".product-modal");
+    const selectedSize = modal?.querySelector(".size-btn.selected");
+
+    if (!selectedSize) {
+      this.showNotification("Wybierz rozmiar!", "error");
+      return;
+    }
+
+    const product = products.find((p) => p.id === productId);
+    if (product) {
+      // Create product with size
+      const productWithSize = {
+        ...product,
+        size: selectedSize.getAttribute("data-size"),
+      };
+
+      cartService.addItem(productWithSize);
+      this.showNotification(
+        `${product.name} (rozmiar ${selectedSize.getAttribute(
+          "data-size"
+        )}) dodano do koszyka!`,
+        "success"
+      );
+
+      // Close modal
+      modal?.remove();
     }
   }
 

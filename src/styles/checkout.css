@@ -2,7 +2,7 @@
 
 .checkout-container {
   min-height: 100vh;
-  background: var(--bg-dark);
+  background: var(--bg-main);
   padding: calc(var(--header-height) + var(--space-8)) 0 var(--space-12);
 }
 
@@ -15,7 +15,7 @@
   font-family: var(--font-display);
   font-size: var(--font-size-4xl);
   font-weight: 900;
-  color: var(--text-light);
+  color: var(--text-primary);
   margin-bottom: var(--space-4);
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -23,6 +23,7 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  text-shadow: 2px 2px 4px rgba(40, 54, 24, 0.1);
 }
 
 .checkout-subtitle {
@@ -39,22 +40,22 @@
 .empty-checkout {
   text-align: center;
   padding: var(--space-16) var(--space-8);
-  background: var(--primary-black);
+  background: var(--bg-cream);
   border-radius: var(--radius-2xl);
-  border: 2px solid var(--accent-electric);
-  box-shadow: 0 0 30px rgba(0, 255, 255, 0.1);
+  border: 2px solid var(--accent-gold);
+  box-shadow: 0 0 30px rgba(221, 161, 94, 0.2);
 }
 
 .empty-icon {
   font-size: var(--font-size-6xl);
-  color: var(--accent-electric);
+  color: var(--accent-gold);
   margin-bottom: var(--space-6);
 }
 
 .empty-title {
   font-family: var(--font-display);
   font-size: var(--font-size-3xl);
-  color: var(--text-light);
+  color: var(--text-primary);
   margin-bottom: var(--space-4);
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -68,12 +69,12 @@
 
 /* Checkout progress */
 .checkout-progress {
-  background: var(--primary-black);
-  border: 2px solid var(--accent-electric);
+  background: var(--bg-cream);
+  border: 2px solid var(--accent-gold);
   border-radius: var(--radius-2xl);
   padding: var(--space-6);
   margin-bottom: var(--space-12);
-  box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+  box-shadow: 0 0 20px rgba(221, 161, 94, 0.2);
 }
 
 .progress-steps {

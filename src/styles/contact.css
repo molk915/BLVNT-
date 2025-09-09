@@ -2,14 +2,15 @@
 
 .contact-hero {
   min-height: 60vh;
-  background: var(--primary-black);
-  color: var(--text-light);
+  background: var(--gradient-hero);
+  color: var(--text-primary);
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   position: relative;
   overflow: hidden;
+  border-bottom: 3px solid var(--accent-gold);
 }
 
 .contact-hero::before {
@@ -19,10 +20,9 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: url("https://images.unsplash.com/photo-1423666639041-f56000c27a9a?w=1600&h=900&fit=crop&overlay=dark")
-      center/cover,
-    var(--gradient-hero);
-  background-blend-mode: multiply;
+  background: url("https://images.unsplash.com/photo-1445205170230-053b83016050?w=1600&h=900&fit=crop")
+    center/cover;
+  opacity: 0.2;
   z-index: 1;
 }
 
@@ -35,12 +35,12 @@
   bottom: 0;
   background: radial-gradient(
       circle at 50% 50%,
-      rgba(0, 255, 255, 0.15) 0%,
+      rgba(221, 161, 94, 0.08) 0%,
       transparent 70%
     ),
     radial-gradient(
       circle at 30% 70%,
-      rgba(157, 76, 221, 0.1) 0%,
+      rgba(188, 108, 37, 0.06) 0%,
       transparent 70%
     );
   z-index: 2;
@@ -63,14 +63,14 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  text-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+  text-shadow: 2px 2px 4px rgba(40, 54, 24, 0.2);
   animation: logoGlow 4s ease-in-out infinite;
 }
 
 .contact-subtitle {
   font-size: var(--font-size-xl);
-  font-weight: 400;
-  color: var(--text-secondary);
+  font-weight: 500;
+  color: var(--text-primary);
   max-width: 600px;
   margin: 0 auto;
   line-height: var(--line-height-relaxed);
@@ -78,12 +78,13 @@
   letter-spacing: 1px;
   font-family: var(--font-street);
   animation: undergroundFade 1s ease-out 0.2s both;
+  text-shadow: 1px 1px 2px rgba(254, 250, 224, 0.3);
 }
 
 /* Contact content */
 .contact-content {
   padding: var(--space-24) 0;
-  background: var(--primary-black);
+  background: var(--bg-main);
 }
 
 .contact-grid {
@@ -98,15 +99,11 @@
   font-family: var(--font-display);
   font-size: var(--font-size-3xl);
   font-weight: 900;
-  color: var(--text-light);
+  color: var(--text-primary);
   margin-bottom: var(--space-8);
   letter-spacing: 2px;
   text-transform: uppercase;
   position: relative;
-  background: var(--gradient-brand);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 .contact-info h2::after {
@@ -114,8 +111,8 @@
   position: absolute;
   bottom: -8px;
   left: 0;
-  width: 50px;
-  height: 3px;
+  width: 60px;
+  height: 4px;
   background: var(--gradient-brand);
   border-radius: var(--radius-full);
 }
@@ -138,17 +135,18 @@
   align-items: flex-start;
   gap: var(--space-4);
   padding: var(--space-6);
-  background: var(--bg-light);
+  background: var(--bg-main);
   border-radius: var(--radius-2xl);
   transition: var(--transition-smooth);
-  border: 2px solid transparent;
+  border: 2px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
 }
 
 .contact-item:hover {
   transform: translateX(8px);
-  background: white;
+  background: var(--bg-cream);
   box-shadow: var(--shadow-lg);
-  border-color: var(--accent-red);
+  border-color: var(--accent-copper);
 }
 
 .contact-icon {
@@ -173,7 +171,7 @@
 .contact-text h3 {
   font-size: var(--font-size-lg);
   font-weight: 700;
-  color: var(--primary-black);
+  color: var(--text-primary);
   margin-bottom: var(--space-2);
 }
 
@@ -182,6 +180,7 @@
   color: var(--text-secondary);
   margin: 0;
   line-height: var(--line-height-relaxed);
+  font-weight: 400;
 }
 
 .contact-text p + p {
@@ -197,25 +196,25 @@
 
 .contact-item .social-link {
   background: var(--gradient-brand);
-  color: white;
-  padding: var(--space-2) var(--space-4);
+  color: var(--text-light);
+  padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-lg);
-  font-size: var(--font-size-sm);
+  text-decoration: none;
   font-weight: 600;
-  transition: var(--transition-fast);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  transition: var(--transition-smooth);
+  border: 2px solid transparent;
 }
 
 .contact-item .social-link:hover {
-  background: var(--gradient-brand-reverse);
+  background: var(--accent-copper);
+  border-color: var(--accent-gold);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-brand);
+  box-shadow: var(--shadow-md);
 }
 
 /* Contact form */
 .contact-form-container {
-  background: var(--bg-light);
+  background: var(--bg-main);
   padding: var(--space-12);
   border-radius: var(--radius-3xl);
   box-shadow: var(--shadow-2xl);
@@ -288,10 +287,11 @@
 .form-group textarea:focus,
 .form-group select:focus {
   outline: none;
-  border-color: var(--accent-red);
-  background: white;
-  box-shadow: 0 0 0 3px rgba(255, 51, 102, 0.1);
+  border-color: var(--accent-gold);
+  background: var(--bg-main);
+  box-shadow: 0 0 0 3px rgba(221, 161, 94, 0.2);
   transform: translateY(-2px);
+  color: var(--text-primary);
 }
 
 .form-group textarea {
@@ -310,22 +310,25 @@
 .form-group.error input,
 .form-group.error textarea,
 .form-group.error select {
-  border-color: #ef4444;
-  background: #fef2f2;
+  border-color: #dc2626;
+  background: rgba(220, 38, 38, 0.1);
+  color: var(--text-primary);
 }
 
 .form-group.success input,
 .form-group.success textarea,
 .form-group.success select {
-  border-color: #10b981;
-  background: #f0fdf4;
+  border-color: var(--accent-gold);
+  background: rgba(221, 161, 94, 0.1);
+  color: var(--text-primary);
 }
 
 .form-error {
-  color: #ef4444;
+  color: #dc2626;
   font-size: var(--font-size-sm);
   margin-top: var(--space-1);
   display: none;
+  font-weight: 600;
 }
 
 .form-group.error .form-error {
@@ -335,7 +338,7 @@
 /* Submit button */
 .submit-btn {
   background: var(--gradient-brand);
-  color: white;
+  color: var(--dark-green);
   border: none;
   padding: var(--space-5) var(--space-8);
   font-size: var(--font-size-lg);
@@ -390,7 +393,7 @@
   width: 20px;
   height: 20px;
   border: 2px solid transparent;
-  border-top: 2px solid white;
+  border-top: 2px solid var(--dark-green);
   border-radius: var(--radius-full);
   animation: spin 1s linear infinite;
   transform: translate(-50%, -50%);
@@ -435,9 +438,9 @@
 }
 
 .map-placeholder:hover {
-  border-color: var(--accent-red);
-  background: white;
-  color: var(--accent-red);
+  border-color: var(--accent-gold);
+  background: rgba(221, 161, 94, 0.05);
+  color: var(--accent-gold);
 }
 
 .map-placeholder-icon {
